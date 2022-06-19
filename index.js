@@ -2,8 +2,15 @@ const express  = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const db = require('./config/mongoose');
 
 const port= process.env.PORT || 3000;
+app.use(express.urlencoded({extended:true}));
+const passport = require('passport');
+
+const passportJwtStrategy=require('./config/passport-jwt-strategy');
+
+app.use('/',require('./router'));
 
 
 
