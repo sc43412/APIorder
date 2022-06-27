@@ -1,20 +1,24 @@
 const mongoose=require('mongoose');
+const user = require('./user');
+var Schema = mongoose.Schema;
 
 // schema to store all users 
 const orderSchema=new mongoose.Schema({
-    customer:{
+    user:{
         type: Schema.Types.ObjectId,
-        ref: "Customer"
+        ref: "User"
 
     },
-    seller:{
-        type: Schema.Types.ObjectId,
-        ref: "Seller"
-    },
-    product:{
-        type: Schema.Types.ObjectId,
-        ref: "User" 
-    },
+    // seller:{
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Seller"
+    // },
+    products: [
+        {
+            type:  mongoose.Schema.Types.ObjectId,
+            ref: 'Quantity'
+        }
+    ],
     amount :{
         type:Number,
         required:true
