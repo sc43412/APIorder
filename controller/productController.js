@@ -10,3 +10,19 @@ module.exports.create = async function(req,res){
    }
 
 }
+
+module.exports.list = async function (req,res){
+  var perPage = 5;
+   page = parseInt(req.query.page);
+   var page = Math.max(0, page);
+  const products = await  Product.find({}).limit(perPage)
+  .skip(perPage * page)
+  .sort({
+      name: 'asc'
+  })
+;
+   return res.status(200).json({products});
+   console.log(products);
+
+  
+}

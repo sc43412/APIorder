@@ -1,10 +1,14 @@
  const Order = require('../model/order')
- const userid = "62af8149191ed90f4abf97ed";
+ //const userid = "62af8149191ed90f4abf97ed";
  const User = require('../model/user');
  const productid = '62b09d866efb753f361d26eb';
  const Cart = require('../model/cart');
  const Product = require('../model/product')
+
+ /// creating a order
  module.exports.add = async function(req,res){
+   try{
+   const userid = req.user._id;
     // FIND THE NAME OF USER
     const user = await  User.findById(userid);
     const name = user.email;
@@ -57,11 +61,19 @@
 
         }
         return res.status(200).json ({"message" : "order is successfully done"});
+      }catch(err){
+         return res.status(404).json({'message' : 'bad gateway'})
+      }
     }
        
-    
+    // view orders
    module.exports.view = async function (req,res){
+      try{
+      const userid = req.user._id;
     const order = await  Order.findById(userid).populate('products','productdetails');
+    if(!order){
+      return res.status(404).json({"message" : "order not placed"});
+    }
     //console.log(order.products.productdetails);
     const order_id = order.id;
     const total_price = order.amount;
@@ -69,11 +81,17 @@
 
 
     return res.status(200).json({order_id,items_ordered,total_price});
+      }
+      catch(err){
+         console.log(err);
+         return res.status(404).json({"messaqge" : "bad gateway path"});
+      }
     
 
    }
-
+  // update orders
    module.exports.update = function (req,res){
+      const userid = req.user._id;
     const user = User.findById(userid);
     const name = user.email;
     const cart = Cart.findOne({amt  : name });
@@ -88,9 +106,10 @@
 
 
    }
-    
+    //delete order
     module.exports.delete = async  function(req,res){
-       const orderid = req.query.deleteid;
+      const userid = req.user._id;
+       const orderid = req.query.delete;
        try{
        const user = User.findById(userid);
        const name = user.email;
@@ -105,11 +124,3 @@
 
 
     }
-//     //   Order.create({
-//     //     _id : req.user._id,
-//     //     seller : req.seller._id,
-//     //     ,
-//     //     user : req.user._id
-//     //   })
-//  
-    
