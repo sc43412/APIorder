@@ -19,7 +19,10 @@ now we get bearer token
 
              ADD  a product
 
-POST http://localhost:8000/product/add-product
+POST http://localhost:8000/product/add-product/
+name : paracetemol
+amount : 200
+pass through body
 /// this one for to get list of products aorted AND LIMIT 5 per page
 GET http://localhost:8000/product/product-list/?page=2
 
@@ -42,9 +45,11 @@ GET http://localhost:8000/order/get-order-details
 
 DELETE http://localhost:8000/order/remove/?delete=62afa29a7e472b5bbd6b6c4e
 here passing order id
+// update a order
+POSt http://localhost:8000/order/update/?product=SAFEROXIM 500 TABLET&quantity=5
 
 ###
 
-            UPLOAD EXCEL FIle
+            UPLOAD EXCEL FIle INSERT INTO PRODUCT
 
 POST POST http://localhost:8000/upload

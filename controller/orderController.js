@@ -90,20 +90,26 @@
 
    }
   // update orders
-   module.exports.update = function (req,res){
+   module.exports.update = async function (req,res){
       const userid = req.user._id;
-    const user = User.findById(userid);
+    const user = await  User.findById(userid);
     const name = user.email;
-    const cart = Cart.findOne({amt  : name });
+    const cart = await Cart.findOne({amt  : name });
+    console.log(cart);
     const pdname = req.query.product;
-    const quantity = req.query.quantity;
-    const obj = {
-        productname : req.query.product,
-        quantity :    req.query.quantity
-    }
-    cart.productdetails.push(obj);
+    const quantity = parseInt( req.query.quantity);
+   // const obj = {
+   //      productname : req.query.product,
+   //      quantity :    req.query.quantity
+   //  }
+     let arr = cart.productdetails;
+     arr.forEach(element => {
+      if(element.name == pdname){
+         element.quantity = quantity;
+      }
+     });
+    
     cart.save();
-
 
    }
     //delete order

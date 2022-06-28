@@ -46,19 +46,45 @@ const excelData = excelToJson({
   //  }]
     });
 
-//console.log(excelData);
+console.log(excelData);
 //let data = await Product.insertMany(excelData.Sheet1) ;
 //console.log(data);
-console.log(excelData.Sheet1);
-const arr = excelData.Sheet1;
-jsonObject = arr.map(JSON.stringify);
-uniqueSet = new Set(jsonObject);
- uniqueArray = Array.from(uniqueSet).map(JSON.parse);
- console.log(uniqueArray);
- uniqueArray.forEach((value)=>{
-    Product.create(value);
- })
-
- console.log(Product.find({}));
-   
+// console.log(excelData.Sheet1);
+// const arr = excelData.Sheet1;
+// jsonObject = arr.map(JSON.stringify);
+// uniqueSet = new Set(jsonObject);
+//  uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+//  console.log(uniqueArray);
+//  uniqueArray.forEach((value)=>{
+//     Product.create(value);
+//  })
+const sheet = excelData.Sheet1;
+const data = await  Product.find({});
+  if(data.length>0){
+    sheet.forEach(async (value)=>{
+     console.log(value.name);
+     const one = await Product.findOne({name : value.name});
+     if(one){
+     await  Product.findOneAndUpdate({name : value.name},{amount : value.amount});
+     }else{
+        Product.create({
+            name : value.name,
+            amount : value.amount
+        })
+     }
+    })
+    return res.status(201).json({"message" : "all are up to date"});
+  }
+  else{
+     sheet.forEach(async (value)=>{
+        const dateentryone =await  Product.findOne({name : value.name});
+        if(dateentryone){
+            console.log("item already exists");
+        }
+       await  Product.create({
+            name : value.name,
+            amount : value.amount
+        })
+     })
+ return res.status(200).json({"message" : "product is created"});  }
 }

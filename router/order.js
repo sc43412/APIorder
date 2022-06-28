@@ -5,6 +5,7 @@ const orderController = require('../controller/orderController');
 router.post('/add-order/?',passport.authenticate('jwt',{session:false}),orderController.add);
 router.get('/get-order-details',passport.authenticate('jwt',{session:false}),orderController.view);
 router.delete('/remove/?',passport.authenticate('jwt',{session:false}),orderController.delete);
+router.post('/update/?',passport.authenticate('jwt',{session:false}),orderController.update)
 module.exports=router;
 
 ///:id/update_quantity/?
